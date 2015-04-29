@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/titlerelativelayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:background="#fff"
+        android:visibility="visible" >
+
+        <TextView
+            android:id="@+id/login_backtofragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:text="历史"
+            android:textColor="#000"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/fenlei_title_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="英汉词典"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/search_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="#CCCCCC">
+
+        <com.lifuz.adapter.AutoSearch
+            android:id="@+id/search_auto"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/search_input"
+            android:focusable="true"
+            android:hint="搜索物品、材料等"
+            android:padding="3dp"
+            android:singleLine="true"
+            android:textColor="#5c615d" />
+
+        <ImageButton
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_margin="5dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/search1"
+            android:background="#ffffff"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nihao"/>
+
+
+</LinearLayout>
