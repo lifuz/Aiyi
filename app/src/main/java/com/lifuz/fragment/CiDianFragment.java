@@ -58,6 +58,7 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        //获取页面布局
         View messageLayout = inflater.inflate(R.layout.cidian_layout,
                 container, false);
 
@@ -72,8 +73,15 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
             case R.id.search_button:
 
                 clearView();
+                //getUrl()方法封装了访问百度的url；
                 url = getUrl();
                 Log.i("tag", url);
+
+                //封装网络访问的方法，根据返回值选择相应的类，如果返回的是JsonObject，则用JsonObjectRequest类进行网络访问
+                //如果返回的是JsonArray，则用JsonArrayRequest类进行访问，这两个类在初始化时，都有相同的五个参数，分别是：
+                //第一个参数：是http访问网络是的方式；第二个参数：是访问网络的url；第三个参数：这是访问网络的参数，如果
+                //是get请求，则应该把他设为空，如果是post请求则填写post请求的参数；第四个参数：如果网络返回成功，并有返回值
+                //则在这个类的方法里处理；第五个参数：如果网络访问失败，则在这个类里，进行相应的处理
 
 
                 JsonObjectRequest jr = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -95,19 +103,23 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
                                 JSONArray symbols = data.getJSONArray("symbols");
                                 JSONObject sym = symbols.getJSONObject(0);
 
+                                //根据输入的字符串是否包含中文字符，来确定返回的json里的参数
                                 boolean flag = IsChinese.isChinese(search_auto.getText().toString());
 
                                 StringBuilder sb = new StringBuilder();
 
                                 if (flag) {
+                                    //如果是中英方向的，则在这个部分进行处理
                                     String zh = sym.getString("ph_zh");
 
+                                    //这个是获取中文发音
                                     if (null != zh) {
                                         ph_zh.setVisibility(View.VISIBLE);
                                         ph_zh_yin.setVisibility(View.VISIBLE);
                                         ph_zh_yin.setText("[" + zh + "]");
                                     }
 
+                                    //这个是中文译成英文部分
                                     JSONArray parts = sym.getJSONArray("parts");
 
 
@@ -127,6 +139,9 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
 
                                     }
                                 } else {
+
+                                    //这个是英中方向的
+                                    //获取美式发音
                                     String am = sym.getString("ph_am");
                                     if (null != am) {
                                         ph_am.setVisibility(View.VISIBLE);
@@ -134,6 +149,7 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
                                         ph_am_yin.setText("[" + am + "]");
                                     }
 
+                                    //获取英式发音
                                     String en = sym.getString("ph_en");
                                     if (null != en) {
                                         ph_en.setVisibility(View.VISIBLE);
@@ -141,6 +157,7 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
                                         ph_en_yin.setText("[" + en + "]");
                                     }
 
+                                    //获取单词的中文意思
                                     JSONArray parts = sym.getJSONArray("parts");
 
 
@@ -170,10 +187,13 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
                                 }
 
                             } else {
+                                //从百度服务器获取信息失败
                                 Toast.makeText(getActivity(), "服务器出错", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
+
+                            //从百度服务器获取信息，data的值为空
                             word_name.setVisibility(View.VISIBLE);
                             word_name.setText(search_auto.getText().toString());
 
@@ -186,11 +206,13 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        //网络访问失败，把失败的原因输出到控制台
                         Log.i("tag", error.getMessage());
                     }
                 });
 
 
+                //进行网络访问
                 mqueue.add(jr);
 
         }
@@ -202,18 +224,17 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //初始化访问网络的栈
         mqueue = Volley.newRequestQueue(getActivity());
 
         initViews(view);
 
-        tv = (TextView) view.findViewById(R.id.tv);
-        search_button = (ImageButton) view.findViewById(R.id.search_button);
-        search_auto = (AutoSearch) view.findViewById(R.id.search_auto);
-        search_button.setOnClickListener(this);
-
 
     }
 
+    /**
+     * 在重新查找的时候，把当前显示的内容清除
+     */
     public void clearView() {
         word_name.setVisibility(View.GONE);
         ph_am.setVisibility(View.GONE);
@@ -223,8 +244,14 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
         ph_am_yin.setVisibility(View.GONE);
         ph_en_yin.setVisibility(View.GONE);
         ph_zh_yin.setVisibility(View.GONE);
+
     }
 
+    /**
+     * 对布局文件里的组件进行初始化
+     *
+     * @param view
+     */
     public void initViews(View view) {
         word_name = (TextView) view.findViewById(R.id.word_name);
         ph_am = (TextView) view.findViewById(R.id.ph_am);
@@ -234,27 +261,41 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
         ph_am_yin = (TextView) view.findViewById(R.id.ph_am_yin);
         ph_en_yin = (TextView) view.findViewById(R.id.ph_en_yin);
         ph_zh_yin = (TextView) view.findViewById(R.id.ph_zh_yin);
+        tv = (TextView) view.findViewById(R.id.tv);
+        search_button = (ImageButton) view.findViewById(R.id.search_button);
+        search_auto = (AutoSearch) view.findViewById(R.id.search_auto);
+        search_button.setOnClickListener(this);
 
 
     }
 
+    /**
+     * 根据用户输入的值确定访问百度的url
+     *
+     * @return 访问百度的url
+     */
     public String getUrl() {
         //?client_id=E4H1r1qNL5XUo64s2o9SUK7F&q=do&from=en&to=zh
+        //定义一个统一的url
         url = "http://openapi.baidu.com/public/2.0/translate/dict/simple?client_id=E4H1r1qNL5XUo64s2o9SUK7F&q=danci&from=fm&to=top";
 
         String str = search_auto.getText().toString();
 
 
+        //判断输入的值有没有中文字符串
         boolean flag = IsChinese.isChinese(str);
 
+        //如果flag为真，则输入的值里包含中文字符串；反之，则不包括
         if (flag) {
             try {
+                //对含有中文字符串的进行URLCncode编码
                 str = URLEncoder.encode(str, "utf-8");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
 
 
+            //对含有中文字符串的输入进行url进行封装，并返回
             url = url.replace("danci", str);
             url = url.replace("fm", "zh");
 
@@ -264,6 +305,7 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
 
 
         } else {
+            //对不含有中文字符串的输入进行封装
             url = url.replace("danci", str);
 
             url = url.replace("fm", "en");
