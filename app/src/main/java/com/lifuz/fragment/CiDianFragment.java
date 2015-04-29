@@ -9,17 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.prd.aiyi.R;
 
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 
 /**
@@ -27,13 +29,13 @@ import org.json.JSONObject;
  */
 public class CiDianFragment extends Fragment implements View.OnClickListener {
 
-    private AsyncHttpClient client;
     private String url;
-    private RequestParams params;
 
     private ImageButton search_button;
 
     private TextView tv;
+
+    private RequestQueue mqueue;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -54,54 +56,48 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        tv.setText("点击事件发生");
-        client.get("http://openapi.baidu.com/public/2.0/translate/dict/simple?client_id=E4H1r1qNL5XUo64s2o9SUK7F&q=do&from=en&to=zh", new JsonHttpResponseHandler() {
+
+        JsonObjectRequest jr = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                tv.setText("网络访问失败");
+            public void onResponse(JSONObject response) {
+                Log.i("tag", response.toString());
+
             }
-
+        }, new Response.ErrorListener() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-
-                Toast.makeText(getActivity(),"网络访问成功",Toast.LENGTH_SHORT).show();
-
-                tv.setText("网络访问成功");
-
-                try {
-                    JSONObject object = response.getJSONObject(0);
-                    JSONObject data = object.getJSONObject("data");
-                    String word_name = data.getString("word_name");
-                    Log.i("word", word_name);
-
-                    tv.setText(word_name);
-                } catch (JSONException e){
-                    e.printStackTrace();
-                }
-
-
+            public void onErrorResponse(VolleyError error) {
+                Log.i("tag", error.getMessage());
             }
         });
+
+
+        mqueue.add(jr);
+
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        client = new AsyncHttpClient();
-        params = new RequestParams();
 
-        tv =(TextView) view.findViewById(R.id.tv);
-        search_button = (ImageButton)view.findViewById(R.id.search_button);
+        mqueue = Volley.newRequestQueue(getActivity());
+
+        tv = (TextView) view.findViewById(R.id.tv);
+        search_button = (ImageButton) view.findViewById(R.id.search_button);
         search_button.setOnClickListener(this);
 
+        String str = null;
+
+        try {
+            str = URLEncoder.encode("我", "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        Log.i("tag",str);
+
         //?client_id=E4H1r1qNL5XUo64s2o9SUK7F&q=do&from=en&to=zh
-        url = "http://openapi.baidu.com/public/2.0/translate/dict/simple";
-
-        params.add("client_id", "E4H1r1qNL5XUo64s2o9SUK7F");
-        params.add("q", "do");
-        params.add("from", "en");
-        params.add("to", "zn");
-
+        url = "http://openapi.baidu.com/public/2.0/translate/dict/simple?client_id=E4H1r1qNL5XUo64s2o9SUK7F&q=%e4%bd%a0&from=zh&to=en";
 
 
     }
