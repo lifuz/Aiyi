@@ -5,7 +5,7 @@
               android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/titlerelativelayout"
+        android:id="@+id/cidian_layout"
         android:layout_width="match_parent"
         android:layout_height="50dip"
         android:background="#fff"
@@ -62,7 +62,7 @@
             android:layout_weight="1"
             android:background="@drawable/search_input"
             android:focusable="true"
-            android:hint="搜索物品、材料等"
+            android:hint="输入要翻译的文本"
             android:padding="3dp"
             android:singleLine="true"
             android:textColor="#5c615d"/>

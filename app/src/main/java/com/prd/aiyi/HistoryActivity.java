@@ -90,9 +90,9 @@ public class HistoryActivity extends  BaseActivity  implements View.OnClickListe
         history_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent it = new Intent(HistoryActivity.this,MainActivity.class);
-                it.putExtra("type",0);
-                it.putExtra("content",strs[position]);
+                Intent it = new Intent(HistoryActivity.this,CiDian.class);
+
+                it.putExtra("danci",strs[position]);
                 startActivity(it);
             }
         });
