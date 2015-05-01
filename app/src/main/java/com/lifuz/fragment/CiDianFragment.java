@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.lifuz.adapter.AutoSearch;
+import com.lifuz.bean.DanCiBen;
 import com.lifuz.sqlite.DanCiBenService;
 import com.lifuz.utils.IsChinese;
 import com.prd.aiyi.HistoryActivity;
@@ -133,7 +134,7 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
         final DanCiBenService ds = new DanCiBenService(getActivity());
 
         //获取单词本
-        List<String> list = ds.queryDanciben();
+        final List<DanCiBen> list = ds.queryDanciben();
 
 
         //如果单词本的个数为零，则新建一个单词本
@@ -142,7 +143,9 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
             arr = new String[]{"默认单词本"};
         } else {
             arr = new String[list.size()];
-            list.toArray(arr);
+            for (int i = 0; i < list.size(); i++) {
+                arr[i] = list.get(i).getName();
+            }
         }
 
 
@@ -151,7 +154,7 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
 
 
         builder.setTitle("添加到单词本")
-                .setSingleChoiceItems(arr, 1, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(arr, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.i("tag", arr[which]);
@@ -159,14 +162,14 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
                         //检查这个单词在这个单词本中是否存在
 
                         boolean flag = ds.queryCheck(which + 1, word_name.getText().toString());
-                        if(!flag){
+                        if (!flag) {
                             //如果不存在，则添加到单词本
-                            ds.insertDan(word_name.getText().toString(),which+1);
+                            ds.insertDan(word_name.getText().toString(), list.get(which).getId());
                             Toast.makeText(getActivity(), "添加成功", Toast.LENGTH_SHORT).show();
 
                         } else {
                             //若存在则告诉用户已存在
-                            Toast.makeText(getActivity(),"单词本已包含这个词语",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "单词本已包含这个词语", Toast.LENGTH_SHORT).show();
                         }
 
                         dialog.dismiss();
