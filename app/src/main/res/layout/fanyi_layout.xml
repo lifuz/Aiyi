@@ -4,24 +4,67 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/titlerelativelayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#ffffff"
-        android:gravity="center"
-        android:orientation="vertical" >
+        android:layout_height="50dip"
+        android:background="#fff"
+        android:visibility="visible">
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/fanyi_yuyan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:text="语言"
+            android:textColor="#000"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/fanyi_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="英 → 中"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:textColor="#000000"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/fanyi_fanyi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="翻译"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            android:textColor="#000"
+            android:textSize="15sp"/>
+
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="源语言:"
+        android:textSize="18sp"/>
+    <EditText
+        android:id="@+id/fanyi_source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minLines="8"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="翻译"/>
+        android:text="目标语言:"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/fanyi_target"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minLines="8"/>
 
 </LinearLayout>
