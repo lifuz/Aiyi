@@ -23,4 +23,5 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile files('libs/Volley.jar')
+    compile files('libs/androideventbus-1.0.2.jar')
 }

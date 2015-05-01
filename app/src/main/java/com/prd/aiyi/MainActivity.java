@@ -1,5 +1,6 @@
 package com.prd.aiyi;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +12,8 @@ import android.view.Window;
 import com.lifuz.fragment.CiDianFragment;
 import com.lifuz.fragment.DanCiBenFragment;
 import com.lifuz.fragment.FanYiFragment;
+
+import org.simple.eventbus.EventBus;
 
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
@@ -47,6 +50,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         fm = getSupportFragmentManager();
         setTabSelection(0);
+
+        Intent it = getIntent();
+        if(null != it) {
+            int type = it.getIntExtra("type",-1);
+            if(type == 0) {
+                String content = it.getStringExtra("content");
+                EventBus.getDefault().post(content,"check");
+                setTabSelection(0);
+
+            }
+        }
 
     }
 
