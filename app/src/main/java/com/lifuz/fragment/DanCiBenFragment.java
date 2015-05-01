@@ -2,6 +2,7 @@ package com.lifuz.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.lifuz.bean.DanCiBen;
 import com.lifuz.sqlite.DanCiBenService;
+import com.prd.aiyi.HistoryActivity;
 import com.prd.aiyi.R;
 
 import java.util.List;
@@ -146,7 +148,10 @@ public class DanCiBenFragment extends Fragment implements View.OnClickListener {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i("tag", listItems.get(position).getName());
+                    Intent it = new Intent(getActivity(), HistoryActivity.class);
+                    it.putExtra("id",listItems.get(position).getId());
+                    it.putExtra("name",listItems.get(position).getName());
+                    startActivity(it);
                 }
             });
 

@@ -36,6 +36,22 @@ public class DanCiBenService {
         Log.i("tag", "插入成功");
     }
 
+    public List<String> querryDanci(int id) {
+        SQLiteDatabase db = sh.getWritableDatabase();
+
+        List<String> list = new ArrayList<>();
+
+        String sql = "select * from danci where cid = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{id+""});
+        while (cursor.moveToNext()) {
+
+            Log.i("tag",cursor.getString(cursor.getColumnIndex("dname")));
+            list.add(cursor.getString(cursor.getColumnIndex("dname")));
+        }
+        Log.i("tag",list.toString());
+        return list;
+    }
+
 
     public List<DanCiBen> queryDanciben() {
         SQLiteDatabase db = sh.getWritableDatabase();
@@ -70,6 +86,7 @@ public class DanCiBenService {
     public void deleteDanciben(int id){
 
         SQLiteDatabase db = sh.getWritableDatabase();
+        db.execSQL("delete from danci where cid = ?", new Object[]{id});
         db.execSQL("delete from danciben where cid = ?",new Object[]{id});
 
     }

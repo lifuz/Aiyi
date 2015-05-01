@@ -161,7 +161,7 @@ public class CiDianFragment extends Fragment implements View.OnClickListener {
 
                         //检查这个单词在这个单词本中是否存在
 
-                        boolean flag = ds.queryCheck(which + 1, word_name.getText().toString());
+                        boolean flag = ds.queryCheck(list.get(which).getId(), word_name.getText().toString());
                         if (!flag) {
                             //如果不存在，则添加到单词本
                             ds.insertDan(word_name.getText().toString(), list.get(which).getId());
